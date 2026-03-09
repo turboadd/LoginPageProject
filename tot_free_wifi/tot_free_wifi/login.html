@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="expires" content="-1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Internet Hotspot</title>
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+body{
+    font-family: sans-serif;
+}
+
+/* ================= CONSENT BOX ================= */
+
+.consent-container{
+    background:#ffffff;
+    max-width:650px;
+    margin:auto;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+.consent-title{
+    font-size:20px;
+    font-weight:600;
+    margin-bottom:15px;
+    text-align:center;
+}
+
+.consent-content{
+    height:250px;
+    overflow:auto;
+    border:1px solid #ddd;
+    padding:15px;
+    font-size:14px;
+    line-height:1.6;
+    margin-bottom:20px;
+}
+
+/* ================= CUSTOM CHECKBOX ================= */
+
+.checkbox-wrapper{
+    display:flex;
+    align-items:center;
+    cursor:pointer;
+    margin-bottom:20px;
+}
+
+.checkbox-wrapper input{
+    display:none;
+}
+
+.custom-box{
+    width:22px;
+    height:22px;
+    border:2px solid #333;
+    border-radius:4px;
+    margin-right:10px;
+    position:relative;
+}
+
+.checkbox-wrapper input:checked + .custom-box::after{
+    content:"✓";
+    position:absolute;
+    left:3px;
+    top:-2px;
+    font-size:18px;
+    color:#28a745;
+    font-weight:bold;
+}
+
+/* ================= BUTTON ================= */
+
+.btn{
+    width:100%;
+    height:45px;
+    border:none;
+    border-radius:6px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.btn-accept{
+    background:#28a745;
+    color:white;
+}
+
+.btn-accept:disabled{
+    background:#a5d6b3;
+    cursor:not-allowed;
+}
+
+.btn-decline{
+    background:#dc3545;
+    color:white;
+    margin-top:10px;
+}
+
+.hidden{
+    display:none;
+}
+</style>
+</head>
+
+<body class="lite">
+
+<!-- ================= CONSENT PAGE ================= -->
+
+<div id="consentPage" class="ie-fixMinHeight">
+<div class="fullscreen" style="background-image:url('img/background.jpg');">
+<div class="overlay">
+<div class="main">
+<div class="wrap animated fadeIn">
+
+<div class="consent-container">
+
+<div class="consent-title">
+คำยินยอมการใช้งานเครือข่ายอินเทอร์เน็ตไร้สาย (Wi-Fi)
+</div>
+
+<div class="consent-content">
+<p><strong>บริษัท โทรคมนาคมแห่งชาติ จำกัด (มหาชน)</strong></p>
+
+<ol>
+<li>ต้องปฏิบัติตามกฎหมายของประเทศไทย</li>
+<li>ห้ามใช้งานเพื่อวัตถุประสงค์ที่ผิดกฎหมาย</li>
+<li>ผู้ให้บริการมีสิทธิ์บันทึกข้อมูล Log File ตามกฎหมาย</li>
+<li>ไม่รับผิดชอบต่อความเสียหายจากการใช้งาน</li>
+<li>คุณภาพสัญญาณอาจเปลี่ยนแปลงตามสภาพแวดล้อม</li>
+<li>สามารถระงับการใช้งานได้ทันทีหากผิดเงื่อนไข</li>
+</ol>
+
+<p>เมื่อกดยอมรับ ถือว่าท่านได้อ่านและยินยอมตามเงื่อนไขทั้งหมด</p>
+</div>
+
+<label class="checkbox-wrapper">
+    <input type="checkbox" id="acceptCheck" onchange="toggleButton()">
+    <span class="custom-box"></span>
+    ข้าพเจ้าได้อ่านและยอมรับเงื่อนไขการใช้งาน
+</label>
+
+<button id="acceptBtn" class="btn btn-accept" disabled onclick="acceptConsent()">
+ยอมรับ / Accept
+</button>
+
+<button class="btn btn-decline" onclick="declineConsent()">
+ไม่ยอมรับ
+</button>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ================= ORIGINAL LOGIN PAGE ================= -->
+
+<div id="loginPage" class="hidden">
+
+$(if chap-id)
+<form name="sendin" action="$(link-login-only)" method="post" style="display:none">
+<input type="hidden" name="username" />
+<input type="hidden" name="password" />
+<input type="hidden" name="dst" value="$(link-orig)" />
+<input type="hidden" name="popup" value="true" />
+</form>
+
+<script src="/md5.js"></script>
+<script>
+function doLogin() {
+document.sendin.username.value = document.login.username.value;
+document.sendin.password.value =
+hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
+document.sendin.submit();
+return false;
+}
+</script>
+$(endif)
+
+<div class="ie-fixMinHeight">
+<div class="fullscreen" style="background-image:url('img/background.jpg');">
+<div class="overlay">
+<div class="main">
+<div class="wrap animated fadeIn">
+
+<form name="login" action="$(link-login-only)" method="post"
+$(if chap-id) onSubmit="return doLogin()" $(endif)>
+
+<input type="hidden" name="dst" value="$(link-orig)" />
+<input type="hidden" name="popup" value="true" />
+
+<img src="img/logo_optsr.png" class="logo" />
+<p class="info">กรุณาลงทะเบียนก่อนใช้งาน</p>
+
+</form>
+
+<a href="register.html" style="
+display:flex;
+justify-content:center;
+align-items:center;
+text-decoration:none;
+background:#f32112;
+color:#ffffff;
+font-size:14px;
+border-radius:6px;
+width:100%;
+height:44px;">
+ลงทะเบียนผู้ใช้งาน
+</a>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+function toggleButton(){
+document.getElementById("acceptBtn").disabled =
+!document.getElementById("acceptCheck").checked;
+}
+
+function acceptConsent(){
+
+fetch("log_accept.php",{
+method:"POST",
+headers:{"Content-Type":"application/x-www-form-urlencoded"},
+body:"mac=$(mac)&ip=$(ip)&useragent="+navigator.userAgent
+});
+
+document.getElementById("consentPage").style.display="none";
+document.getElementById("loginPage").classList.remove("hidden");
+}
+
+function declineConsent(){
+alert("ท่านต้องยอมรับเงื่อนไขก่อนใช้งานอินเทอร์เน็ต");
+}
+</script>
+
+</body>
+</html>

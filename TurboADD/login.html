@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="expires" content="-1">
+  <title>Internet Hotspot — Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0a0c10;
+      --surface: #111318;
+      --border:  rgba(255,255,255,0.07);
+      --accent:  #00e5a0;
+      --accent2: #00aeff;
+      --text:    #e8ecf0;
+      --muted:   #6b7280;
+      --error:   #ff5e6c;
+    }
+
+    html, body {
+      min-height: 100%; overflow-x: hidden;
+      background: var(--bg); color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .bg-blobs { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(90px); opacity: 0.22;
+      animation: drift 14s ease-in-out infinite alternate;
+    }
+    .blob-1 { width:520px; height:520px; background:var(--accent);  top:-180px; left:-120px; animation-duration:16s; }
+    .blob-2 { width:420px; height:420px; background:var(--accent2); bottom:-140px; right:-100px; animation-duration:20s; animation-delay:-6s; }
+    .blob-3 { width:260px; height:260px; background:#7c5cfc; top:50%; left:50%; transform:translate(-50%,-50%); animation-duration:12s; animation-delay:-3s; }
+    @keyframes drift {
+      from { transform:translate(0,0) scale(1); }
+      to   { transform:translate(40px,30px) scale(1.08); }
+    }
+    .grid-overlay {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .wrapper {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .card {
+      width: 100%; max-width: 420px;
+      background: var(--surface);
+      border: 1px solid var(--border); border-radius: 28px;
+      padding: 48px 40px;
+      box-shadow: 0 0 0 1px rgba(0,229,160,0.06), 0 40px 80px rgba(0,0,0,0.6);
+      animation: slideUp 0.55s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    @keyframes slideUp {
+      from { opacity:0; transform:translateY(28px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* Step badge */
+    .step-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .logo-wrap { display:flex; align-items:center; gap:10px; }
+    .logo-icon {
+      width:38px; height:38px;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius:10px; display:flex; align-items:center; justify-content:center;
+    }
+    .logo-icon svg { width:20px; height:20px; fill:#0a0c10; }
+    .logo-text { font-family:'Syne',sans-serif; font-size:15px; font-weight:700; line-height:1.2; }
+    .logo-text span { display:block; font-size:10px; font-weight:400; color:var(--muted); letter-spacing:.06em; text-transform:uppercase; }
+    .step-badge {
+      background:rgba(0,229,160,0.12); border:1px solid rgba(0,229,160,0.25); color:var(--accent);
+      font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+      padding:4px 10px; border-radius:999px;
+    }
+
+    h1 { font-family:'Syne',sans-serif; font-size:28px; font-weight:800; line-height:1.15; margin-bottom:6px; }
+    .subtitle { font-size:14px; color:var(--muted); font-weight:300; margin-bottom:32px; }
+
+    /* Error */
+    .error-banner {
+      background:rgba(255,94,108,0.12); border:1px solid rgba(255,94,108,0.3);
+      border-radius:12px; padding:12px 16px; font-size:13px; color:var(--error);
+      margin-bottom:24px; display:flex; align-items:center; gap:8px;
+      animation:shake .4s ease;
+    }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+    .error-banner svg { width:16px; height:16px; flex-shrink:0; fill:none; stroke:currentColor; stroke-width:2; }
+
+    /* Fields */
+    .field { margin-bottom:18px; }
+    label { display:block; font-size:12px; font-weight:500; letter-spacing:.07em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+    .input-wrap { position:relative; }
+    .input-wrap .ico {
+      position:absolute; left:14px; top:50%; transform:translateY(-50%);
+      width:16px; height:16px; fill:none; stroke:var(--muted); stroke-width:2;
+      stroke-linecap:round; stroke-linejoin:round;
+      pointer-events:none; transition:stroke .2s;
+    }
+    input[type="text"], input[type="password"] {
+      width:100%; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:12px;
+      padding:14px 14px 14px 42px; color:var(--text); font-size:15px; font-family:'DM Sans',sans-serif;
+      outline:none; transition:border-color .2s, box-shadow .2s, background .2s;
+    }
+    input::placeholder { color:var(--muted); }
+    input:focus { border-color:var(--accent); background:rgba(0,229,160,0.04); box-shadow:0 0 0 3px rgba(0,229,160,0.1); }
+
+    .eye-btn {
+      position:absolute; right:14px; top:50%; transform:translateY(-50%);
+      background:none; border:none; cursor:pointer; color:var(--muted); padding:4px;
+      display:flex; align-items:center; transition:color .2s;
+    }
+    .eye-btn:hover { color:var(--text); }
+    .eye-btn svg { width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    input[type="password"] { padding-right:42px; }
+
+    /* Submit */
+    .btn-login {
+      width:100%;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      border:none; border-radius:12px; padding:15px;
+      color:#0a0c10; font-size:15px; font-weight:700; font-family:'Syne',sans-serif; letter-spacing:.02em;
+      cursor:pointer; margin-top:8px;
+      transition:transform .15s, box-shadow .15s;
+      box-shadow:0 4px 24px rgba(0,229,160,0.25);
+    }
+    .btn-login:hover { transform:translateY(-1px); box-shadow:0 8px 32px rgba(0,229,160,0.35); }
+    .btn-login:active { transform:translateY(0); }
+
+    /* Divider */
+    .divider { display:flex; align-items:center; gap:12px; margin:22px 0; }
+    .divider::before,.divider::after { content:''; flex:1; height:1px; background:var(--border); }
+    .divider span { font-size:11px; color:var(--muted); white-space:nowrap; letter-spacing:.06em; text-transform:uppercase; }
+
+    /* Back to register */
+    .btn-back {
+      width:100%; background:transparent; border:1px solid var(--border); border-radius:12px;
+      padding:14px; color:var(--text); font-size:14px; font-family:'DM Sans',sans-serif;
+      cursor:pointer; transition:border-color .2s, background .2s;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      text-decoration:none;
+    }
+    .btn-back:hover { border-color:rgba(255,255,255,0.2); background:rgba(255,255,255,0.04); }
+    .btn-back svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+
+    /* Footer */
+    .card-footer {
+      margin-top:28px; padding-top:20px; border-top:1px solid var(--border);
+      display:flex; justify-content:space-between; align-items:center;
+      font-size:12px; color:var(--muted);
+    }
+    .signal-dots { display:flex; gap:4px; align-items:flex-end; }
+    .dot { width:4px; border-radius:2px; background:var(--accent); animation:pulse 1.4s ease-in-out infinite; }
+    .dot:nth-child(1){height:8px;  animation-delay:0s}
+    .dot:nth-child(2){height:14px; animation-delay:.2s}
+    .dot:nth-child(3){height:20px; animation-delay:.4s}
+    .dot:nth-child(4){height:14px; animation-delay:.6s}
+    @keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+    @media(max-width:480px) {
+      .card { padding:36px 28px; }
+      h1 { font-size:24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+<div class="grid-overlay"></div>
+
+<div class="wrapper">
+  <div class="card">
+
+    <div class="step-row">
+      <div class="logo-wrap">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 6.5a1 1 0 0 1 .36-.77C3.93 3.85 7.8 2.5 12 2.5s8.07 1.35 10.64 3.23A1 1 0 0 1 23 6.5a1 1 0 0 1-1.64.77C19.27 5.72 15.82 4.5 12 4.5S4.73 5.72 2.64 7.27A1 1 0 0 1 1 6.5zm3.13 3.5a1 1 0 0 1 .37-.77C6.3 7.73 9.02 6.5 12 6.5s5.7 1.23 7.5 2.73a1 1 0 0 1-1.28 1.54C16.62 9.46 14.42 8.5 12 8.5s-4.62.96-6.22 2.27A1 1 0 0 1 4.13 10zm3.52 3.5a1 1 0 0 1 .38-.78C9.18 11.64 10.52 11 12 11s2.82.64 3.97 1.72a1 1 0 0 1-1.36 1.46A3.3 3.3 0 0 0 12 13a3.3 3.3 0 0 0-2.61 1.18A1 1 0 0 1 7.65 13.5zM12 21.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+          </svg>
+        </div>
+        <div class="logo-text">HotspotNet <span>Free WiFi</span></div>
+      </div>
+      <span class="step-badge">Step 2 of 2</span>
+    </div>
+
+    <h1>เข้าสู่ระบบ</h1>
+    <p class="subtitle">ใช้ username ที่ได้รับจากการลงทะเบียน</p>
+
+    <!-- $(if error) -->
+    <div class="error-banner">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      $(error)
+    </div>
+    <!-- $(endif) -->
+
+    <!-- MikroTik CHAP login form -->
+    $(if chap-id)
+    <form name="sendin" action="$(link-login-only)" method="post" style="display:none">
+      <input type="hidden" name="username" />
+      <input type="hidden" name="password" />
+      <input type="hidden" name="dst"   value="$(link-orig)" />
+      <input type="hidden" name="popup" value="true" />
+    </form>
+    <script src="/md5.js"></script>
+    <script>
+      function doLogin() {
+        document.sendin.username.value = document.loginform.username.value;
+        document.sendin.password.value = hexMD5('$(chap-id)' + document.loginform.password.value + '$(chap-challenge)');
+        document.sendin.submit();
+        return false;
+      }
+    </script>
+    $(endif)
+
+    <form name="loginform" action="$(link-login-only)" method="post"
+          $(if chap-id) onsubmit="return doLogin()" $(endif)>
+      <input type="hidden" name="dst"   value="$(link-orig)" />
+      <input type="hidden" name="popup" value="true" />
+
+      <div class="field">
+        <label for="username">Username</label>
+        <div class="input-wrap">
+          <svg class="ico" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="text" id="username" name="username" value="$(username)"
+            placeholder="กรอก Username" autocomplete="username" required />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="input-wrap">
+          <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" id="password" name="password"
+            placeholder="กรอก Password" autocomplete="current-password" required />
+          <button type="button" class="eye-btn" onclick="togglePw()" aria-label="แสดงรหัสผ่าน">
+            <svg id="eye-icon" viewBox="0 0 24 24">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-login">เชื่อมต่ออินเตอร์เน็ต</button>
+    </form>
+
+    <div class="divider"><span>ยังไม่มีบัญชี?</span></div>
+
+    <!-- Back to register -->
+    <a class="btn-back" id="btn-to-register" href="/register.html">
+      <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      ลงทะเบียนรับสิทธิ์ WiFi ฟรี
+    </a>
+
+    <div class="card-footer">
+      <div class="signal-dots">
+        <div class="dot"></div><div class="dot"></div>
+        <div class="dot"></div><div class="dot"></div>
+      </div>
+      <span>Secure · Encrypted · Fast</span>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  /* ── Pass URL params back to register if user clicks back ── */
+  (function () {
+    const p = new URLSearchParams(window.location.search);
+    const regHref = '/register.html?' + new URLSearchParams({
+      dst:              p.get('dst')            || '',
+      'chap-id':        p.get('chap-id')        || '',
+      'chap-challenge': p.get('chap-challenge') || '',
+      mac:              p.get('mac')            || '',
+    }).toString();
+    document.getElementById('btn-to-register').href = regHref;
+  })();
+
+  function togglePw() {
+    const input = document.getElementById('password');
+    const icon  = document.getElementById('eye-icon');
+    const show  = input.type === 'password';
+    input.type  = show ? 'text' : 'password';
+    icon.innerHTML = show
+      ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>`
+      : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+  }
+</script>
+</body>
+</html>

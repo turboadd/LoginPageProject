@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="-1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Internet hotspot - Log in</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/sweetalert2.js"></script>
+    <link rel="stylesheet" href="css/sweetalert2.css">
+</head>
+
+<body class="lite">
+
+    <!-- two other colors
+
+<body class="lite">
+<body class="dark">
+
+-->
+
+    $(if chap-id)
+    <form name="sendin" action="$(link-login-only)" method="post" style="display:none">
+        <input type="hidden" name="username" />
+        <input type="hidden" name="password" />
+        <input type="hidden" name="dst" value="$(link-orig)" />
+        <input type="hidden" name="popup" value="true" />
+    </form>
+
+    <script src="/md5.js"></script>
+    <script>
+        function doLogin() {
+            document.sendin.username.value = document.login.username.value;
+            document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
+            document.sendin.submit();
+            return false;
+        }
+
+    </script>
+    $(endif)
+    <div class="ie-fixMinHeight">
+        <div class="fullscreen" style="background-image:url('img/background.jpg');" data-img-width="2000"
+            data-img-height="911" data-diff="100">
+            <div class="overlay">
+                <div class="main">
+                    <div class="wrap animated fadeIn">
+                        <form action="http://192.168.201.20/vichaivej_login/register.php" method="post" id="form"
+                            onsubmit="return validateForm()">
+                            <input type="hidden" name="dst" value="$(link-orig)" />
+                            <input type="hidden" name="popup" value="true" />
+                            <img src="img/logo-samutsakhon.png" class="logo" />
+                            <p class="info $(if error)alert$(endif)">
+                                $(if error == "")Please log in to use the internet hotspot service
+                                $(if trial == 'yes')
+                                <br />Free trial available,
+                                <a
+                                    href="$(link-login-only)?dst=$(link-orig-esc)&amp;username=T-$(mac-esc)">clickhere</a>.
+                                $(endif)
+                                $(endif)
+                                $(if error)$(error)$(endif)
+                            </p>
+                            <label>
+                                <img class="ico" src="img/user.svg" alt="#" />
+                                <input name="idcard" id="idcard" type="text" placeholder="เลขประจำตัวประชาชน"
+                                    title="เลขประจำตัวประชาชน" maxlength="13" />
+                            </label>
+
+                            <label>
+                                <img class="ico" src="img/password.svg" alt="#" />
+                                <input name="phone" type="text" id="phone" placeholder="เลขหมายโทรศัพท์"
+                                    title="เลขหมายโทรศัพท์" maxlength="10" />
+                                <input type="hidden" name="mac" value="$(mac)">
+                                <input type="hidden" name="ip" value="$(ip)">
+                                <input type="hidden" name="username" value="$(username)">
+                                <input type="hidden" name="link-login" value="$(link-login)">
+                                <input type="hidden" name="link-orig" value="$(link-orig)">
+                                <input type="hidden" name="error" value="$(error)">
+                                <input type="hidden" name="chap-id" value="$(chap-id)">
+                                <input type="hidden" name="chap-challenge" value="$(chap-challenge)">
+                                <input type="hidden" name="link-login-only" value="$(link-login-only)">
+                                <input type="hidden" name="link-orig-esc" value="$(link-orig-esc)">
+                                <input type="hidden" name="mac-esc" value="$(mac-esc)">
+                                <!-- Change Username to same api user -->
+                                <input name="UsernameInSite" type="hidden" value="s0l#api" />
+                                <input name="PasswordInSite" type="hidden" value="api#s0l" />
+                            </label>
+                            <div style="color: red; font-size: 15px; margin-bottom: 20px; text-align: center;">
+                            * ใช้งานได้แค่ครั้งละ 12 ชั่วโมง
+                            </div>
+                            <input type="submit" value="ลงทะเบียน" />
+
+                        </form>
+                        <form name="login" action="$(link-login-only)" method="post" $(if chap-id)
+                            onSubmit="return doLogin()" $(endif)>
+                            <input type="hidden" name="dst" value="$(link-orig)" />
+                            <input type="hidden" name="popup" value="true" />
+                        </form>
+                        <p class="info bt">โรงพยาบาลวิชัยเวช อินเตอร์เนชั่นแนล (สมุทรสาคร)<br>
+                            93/256 หมู่ 7 ถนนเศรษฐกิจ1 ตำบลท่าทราย อำเภอเมือง<br>จังหวัดสมุทรสาคร 74000<br>
+                            โทรศัพท์: 034 410 700-6<br>
+                            โทรสาร: 034 410 710</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function validateForm() {
+            var idcard = document.forms["form"]["idcard"].value;
+            var phone = document.forms["form"]["phone"].value;
+            if (idcard == "" || phone == "") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "กรุณากรอกข้อมูลให้ครบถ้วน",
+                    timer: 1500
+                });
+                return false;
+            } else {
+                var value1 = (11 - (((idcard[0] * 13) + (idcard[1] * 12) + (idcard[2] * 11) + (idcard[3] * 10) + (idcard[4] * 9) + (idcard[5] * 8) + (idcard[6] * 7) + (idcard[7] * 6) + (idcard[8] * 5) + (idcard[9] * 4) + (idcard[10] * 3) + (idcard[11] * 2)) % 11)) % 10;
+                var value2 = idcard[12];
+                if (value1 == value2) {
+                    if (phone.length == 10) {
+                        if (phone[0] == 0 && (phone[1] == 6 || phone[1] == 8 || phone[1] == 9)) {
+                            Swal.fire({
+                                title: "Are you sure?",
+                                text: "คุณต้องการบันทึกใช่หรือไม่",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "ยืนยัน",
+                                cancelButtonText: "ยกเลิก"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    document.getElementById("form").submit();
+                                } else if (result.isDenied) {
+                                    return false;
+                                } else {
+                                    return false;
+                                }
+                            });
+                            return false;
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "เบอร์โทรศัพท์ไม่ถูกต้อง",
+                                timer: 1500
+                            });
+                            return false;
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "เบอร์โทรศัพท์ไม่ถูกต้อง",
+                            timer: 1500
+                        });
+                        return false;
+                    }
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "เลขบัตรประชาชนไม่ถูกต้อง",
+                        timer: 1500
+                    });
+                    return false;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

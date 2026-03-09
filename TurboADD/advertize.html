@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="expires" content="-1">
+  <title>Internet Hotspot — Advertisement</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0a0c10;
+      --surface: #111318;
+      --border:  rgba(255,255,255,0.07);
+      --accent:  #00e5a0;
+      --accent2: #00aeff;
+      --text:    #e8ecf0;
+      --muted:   #6b7280;
+    }
+
+    html, body {
+      height: 100%; overflow: hidden;
+      background: var(--bg); color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* ── Background ── */
+    .bg-blobs { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(90px); opacity: 0.22;
+      animation: drift 14s ease-in-out infinite alternate;
+    }
+    .blob-1 { width:520px; height:520px; background:var(--accent);  top:-180px; left:-120px; animation-duration:16s; }
+    .blob-2 { width:420px; height:420px; background:var(--accent2); bottom:-140px; right:-100px; animation-duration:20s; animation-delay:-6s; }
+    .blob-3 { width:260px; height:260px; background:#7c5cfc; top:50%; left:50%; transform:translate(-50%,-50%); animation-duration:12s; animation-delay:-3s; }
+    @keyframes drift {
+      from { transform:translate(0,0) scale(1); }
+      to   { transform:translate(40px,30px) scale(1.08); }
+    }
+    .grid-overlay {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* ── Layout ── */
+    .screen {
+      position: fixed; inset: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: center;
+      padding: 32px;
+    }
+
+    /* ── Ad Card ── */
+    .ad-card {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 560px;
+      background: var(--surface);
+      border: 1px solid var(--border); border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(0,229,160,0.08), 0 48px 96px rgba(0,0,0,0.65);
+      animation: slideUp 0.55s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    @keyframes slideUp {
+      from { opacity:0; transform:translateY(28px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* Banner */
+    .ad-banner {
+      width:100%; height:220px;
+      background: linear-gradient(135deg,#0d2b1f 0%,#091a2e 50%,#140d2b 100%);
+      position:relative; overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .ad-glow {
+      position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse 60% 60% at 30% 50%, rgba(0,229,160,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 75% 50%, rgba(0,174,255,0.15) 0%, transparent 70%);
+    }
+    .ad-dot {
+      position:absolute; border-radius:50%; opacity:0.5;
+      animation: floatDot 4s ease-in-out infinite alternate;
+    }
+    .ad-dot:nth-child(1){width:8px;  height:8px;  background:var(--accent);  top:24px;    left:40px;   animation-delay:0s;}
+    .ad-dot:nth-child(2){width:5px;  height:5px;  background:var(--accent2); top:60px;    right:60px;  animation-delay:.8s;}
+    .ad-dot:nth-child(3){width:10px; height:10px; background:#7c5cfc;        bottom:30px; left:80px;   animation-delay:1.5s;}
+    .ad-dot:nth-child(4){width:6px;  height:6px;  background:var(--accent);  bottom:44px; right:44px;  animation-delay:.4s;}
+    @keyframes floatDot { from{transform:translateY(0)} to{transform:translateY(-12px)} }
+
+    .ad-brand { position:relative; z-index:1; text-align:center; }
+    .ad-logo {
+      width:72px; height:72px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius:20px;
+      display:flex; align-items:center; justify-content:center;
+      margin:0 auto 16px;
+      box-shadow:0 8px 32px rgba(0,229,160,0.35);
+    }
+    .ad-logo svg { width:36px; height:36px; }
+    .ad-brand-name {
+      font-family:'Syne',sans-serif; font-size:26px; font-weight:800;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .ad-brand-sub { font-size:12px; color:rgba(255,255,255,0.4); margin-top:4px; letter-spacing:.06em; text-transform:uppercase; }
+
+    /* Body */
+    .ad-body { padding:28px 36px 32px; }
+    .ad-badge {
+      display:inline-block;
+      background:rgba(0,229,160,0.12); border:1px solid rgba(0,229,160,0.25); color:var(--accent);
+      font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+      padding:4px 10px; border-radius:999px; margin-bottom:14px;
+    }
+    .ad-title { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; line-height:1.25; margin-bottom:10px; }
+    .ad-desc  { font-size:14px; color:var(--muted); line-height:1.6; margin-bottom:24px; }
+
+    /* Actions */
+    .ad-actions { display:flex; align-items:center; gap:16px; }
+    .btn-cta {
+      flex:1;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      border:none; border-radius:12px; padding:13px 20px;
+      color:#0a0c10; font-size:14px; font-weight:700; font-family:'Syne',sans-serif;
+      cursor:pointer; transition:transform .15s, box-shadow .15s;
+      box-shadow:0 4px 20px rgba(0,229,160,0.25); white-space:nowrap;
+    }
+    .btn-cta:hover { transform:translateY(-1px); box-shadow:0 8px 28px rgba(0,229,160,0.38); }
+
+    .btn-skip {
+      background:none; border:1px solid var(--border); border-radius:12px;
+      padding:10px 18px; color:var(--muted); font-size:13px; font-family:'DM Sans',sans-serif;
+      cursor:pointer; display:flex; align-items:center; gap:8px; white-space:nowrap;
+      transition:border-color .2s, color .2s;
+    }
+    .btn-skip:hover:not(:disabled) { border-color:rgba(255,255,255,0.2); color:var(--text); }
+    .btn-skip:disabled { cursor:default; }
+
+    /* Ring */
+    .ring-wrap { position:relative; width:32px; height:32px; flex-shrink:0; }
+    .ring-wrap svg { transform:rotate(-90deg); }
+    .ring-bg   { fill:none; stroke:rgba(255,255,255,0.08); stroke-width:3; }
+    .ring-fill { fill:none; stroke:var(--accent); stroke-width:3; stroke-linecap:round; }
+    .ring-num {
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      font-size:12px; font-weight:700; color:var(--accent); font-family:'Syne',sans-serif;
+    }
+
+    /* Progress bar at bottom */
+    .progress-bar {
+      height: 3px;
+      background: rgba(255,255,255,0.06);
+      position: relative; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      width: 0%;
+      transition: width 1s linear;
+    }
+
+    @media(max-width:480px) {
+      .ad-body { padding:24px 24px 28px; }
+      .ad-title { font-size:19px; }
+      .ad-actions { flex-direction:column; }
+      .btn-cta,.btn-skip { width:100%; justify-content:center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+<div class="grid-overlay"></div>
+
+<div class="screen">
+  <div class="ad-card">
+
+    <div class="ad-banner">
+      <div class="ad-glow"></div>
+      <div class="ad-dot"></div><div class="ad-dot"></div>
+      <div class="ad-dot"></div><div class="ad-dot"></div>
+      <div class="ad-brand">
+        <div class="ad-logo">
+          <!-- แก้เป็น logo จริง -->
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 32 Q24 16 32 32 Q40 48 48 32" stroke="#0a0c10" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+            <circle cx="32" cy="32" r="5" fill="#0a0c10"/>
+          </svg>
+        </div>
+        <div class="ad-brand-name">BrandName</div>
+        <div class="ad-brand-sub">Official Sponsor · Free WiFi</div>
+      </div>
+    </div>
+
+    <div class="ad-body">
+      <span class="ad-badge">Sponsored</span>
+      <div class="ad-title">ช้อปออนไลน์ง่ายๆ<br/>ส่งฟรีทั่วไทย 🚀</div>
+      <p class="ad-desc">
+        สินค้าคุณภาพกว่า 50,000 รายการ ราคาพิเศษเฉพาะวันนี้<br/>
+        ใช้โค้ด <strong style="color:var(--accent)">FREEWIFI</strong> รับส่วนลดเพิ่มอีก 15%
+      </p>
+      <div class="ad-actions">
+        <button class="btn-cta" id="btn-cta" onclick="goToAd()">ดูโปรโมชัน →</button>
+        <button class="btn-skip" id="btn-skip" disabled onclick="goToRegister()">
+          <div class="ring-wrap">
+            <svg width="32" height="32" viewBox="0 0 32 32">
+              <circle class="ring-bg"   cx="16" cy="16" r="13"/>
+              <circle class="ring-fill" cx="16" cy="16" r="13" id="ring-fill"/>
+            </svg>
+            <div class="ring-num" id="ring-num">3</div>
+          </div>
+          ข้าม
+        </button>
+      </div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const TOTAL = 3;
+  let remaining = TOTAL;
+  const C = 2 * Math.PI * 13; // ≈ 81.68
+
+  const ringEl    = document.getElementById('ring-fill');
+  const numEl     = document.getElementById('ring-num');
+  const skipBtn   = document.getElementById('btn-skip');
+  const progressEl= document.getElementById('progress-fill');
+
+  ringEl.style.strokeDasharray  = C;
+  ringEl.style.strokeDashoffset = 0;
+
+  // Kick progress bar immediately
+  requestAnimationFrame(() => {
+    progressEl.style.width = '100%';
+    progressEl.style.transition = `width ${TOTAL}s linear`;
+  });
+
+  function tick() {
+    remaining--;
+    ringEl.style.transition      = 'stroke-dashoffset 1s linear';
+    ringEl.style.strokeDashoffset = ((TOTAL - remaining) / TOTAL) * C;
+
+    if (remaining > 0) {
+      numEl.textContent = remaining;
+      setTimeout(tick, 1000);
+    } else {
+      numEl.textContent = '✓';
+      skipBtn.disabled  = false;
+      skipBtn.style.borderColor = 'rgba(0,229,160,0.45)';
+      skipBtn.style.color       = 'var(--accent)';
+      goToRegister();
+    }
+  }
+  setTimeout(tick, 1000);
+
+  // ── Helpers ──────────────────────────────────────────
+  function getParam(key) {
+    return new URLSearchParams(window.location.search).get(key) || '';
+  }
+
+  function goToRegister() {
+    const p = new URLSearchParams({
+      dst:            getParam('dst'),
+      login:          getParam('login'),
+      'chap-id':      getParam('chap-id'),
+      'chap-challenge': getParam('chap-challenge'),
+      mac:            getParam('mac'),
+    });
+    window.location.href = '/register.html?' + p.toString();
+  }
+
+  function goToAd() {
+    // แก้ URL โฆษณาที่นี่
+    window.open('https://example.com/promo', '_blank');
+  }
+</script>
+</body>
+</html>
