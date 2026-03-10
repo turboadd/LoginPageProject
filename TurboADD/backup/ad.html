@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache" />
+  <meta http-equiv="expires" content="-1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>กำลังเชื่อมต่อ...</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #f5f5f5;
+      color: #111;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .ad-box {
+      background: #f0f0f0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 24px;
+    }
+
+    .status {
+      font-size: 14px;
+      color: #444;
+      margin-bottom: 6px;
+    }
+
+    .countdown {
+      font-size: 28px;
+      font-weight: 700;
+      color: #111;
+    }
+
+    .note {
+      font-size: 12px;
+      color: #999;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="ad-box">
+      <!-- พื้นที่โฆษณา 360×160 -->
+      โฆษณา
+    </div>
+
+    <div class="status">กำลังเชื่อมต่ออินเทอร์เน็ต</div>
+    <div class="countdown" id="count">3</div>
+    <div class="note">กรุณารอสักครู่...</div>
+  </div>
+
+  <script>
+    var sec = 3;
+    var el = document.getElementById('count');
+    var t = setInterval(function () {
+      sec--;
+      el.textContent = sec;
+      if (sec <= 0) {
+        clearInterval(t);
+        location.href = 'status.html'; // MikroTik จะ replace ด้วย $(link-orig)
+      }
+    }, 1000);
+  </script>
+
+</body>
+</html>

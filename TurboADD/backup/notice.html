@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache" />
+  <meta http-equiv="expires" content="-1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ประกาศ — Hotspot</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #f5f5f5;
+      color: #111;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .notice-body {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #333;
+      margin-bottom: 24px;
+    }
+
+    .notice-body p { margin-bottom: 10px; }
+    .notice-body p:last-child { margin-bottom: 0; }
+
+    .notice-date {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 20px;
+    }
+
+    .btn-continue {
+      width: 100%;
+      padding: 11px;
+      background: #111;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn-continue:hover { background: #333; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="card-title">📢 ประกาศสำหรับเจ้าหน้าที่</div>
+
+    <div class="notice-date">วันที่ 1 มกราคม 2568</div>
+
+    <div class="notice-body">
+      <p>ยินดีต้อนรับเจ้าหน้าที่ทุกท่าน กรุณาอ่านข้อกำหนดการใช้งานเครือข่ายก่อนเริ่มใช้งาน</p>
+      <p>การใช้งานอินเทอร์เน็ตจะถูกบันทึก log ตามนโยบายความปลอดภัยของหน่วยงาน กรุณาใช้งานอย่างเหมาะสม</p>
+      <p>หากพบปัญหาการเชื่อมต่อ กรุณาติดต่อฝ่าย IT</p>
+    </div>
+
+    <button class="btn-continue" onclick="location.href='status.html'">
+      รับทราบและใช้งาน →
+    </button>
+  </div>
+
+</body>
+</html>

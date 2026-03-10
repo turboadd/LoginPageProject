@@ -1,0 +1,510 @@
+$(if http-status == 302)Hotspot advertisement$(endif)
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="expires" content="-1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Internet Access</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       VARIABLES & RESET
+    ============================================ */
+    :root {
+      --bg:       #f7f6f2;
+      --surface:  #ffffff;
+      --ink:      #1a1a18;
+      --ink-muted:#6b6b65;
+      --accent:   #1a1a18;
+      --border:   #e5e4de;
+      --radius:   4px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================================
+       LAYOUT
+    ============================================ */
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 480px;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: rise 0.5s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
+    }
+
+    @keyframes rise {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================
+       HEADER BAR
+    ============================================ */
+    .card-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-header .brand {
+      font-family: 'DM Serif Display', serif;
+      font-size: 18px;
+      letter-spacing: -0.3px;
+    }
+
+    .mode-badge {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+
+    /* ============================================
+       CARD BODY
+    ============================================ */
+    .card-body {
+      padding: 28px;
+    }
+
+    /* ============================================
+       MODE: SPLASH — Ad Banner
+    ============================================ */
+    #mode-splash { display: none; }
+
+    .ad-banner {
+      width: 100%;
+      aspect-ratio: 16/7;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .ad-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .ad-banner .ad-placeholder {
+      text-align: center;
+      color: var(--ink-muted);
+    }
+    .ad-banner .ad-placeholder span {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .ad-banner .ad-placeholder p {
+      font-size: 13px;
+      font-family: 'DM Serif Display', serif;
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      margin-bottom: 20px;
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .progress-label span {
+      font-size: 12px;
+      color: var(--ink-muted);
+    }
+    .progress-label strong {
+      font-size: 13px;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress-track {
+      height: 2px;
+      background: var(--border);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--ink);
+      border-radius: 100px;
+      width: 100%;
+      transform-origin: left;
+      transition: transform 1s linear;
+    }
+
+    /* ============================================
+       MODE: ANNOUNCE — Notice
+    ============================================ */
+    #mode-announce { display: none; }
+
+    .announce-icon {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .announce-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .announce-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+
+    .announce-body {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--ink-muted);
+      margin-bottom: 8px;
+    }
+
+    .announce-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    .announce-meta {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .announce-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .announce-meta-item .label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-muted);
+    }
+
+    .announce-meta-item .value {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* ============================================
+       SHARED — Button & Footer
+    ============================================ */
+    .btn-continue {
+      width: 100%;
+      padding: 14px 20px;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-continue:hover { opacity: 0.82; }
+    .btn-continue:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .btn-continue svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .card-footer {
+      padding: 14px 28px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-network {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--ink-muted);
+    }
+
+    .dot-online {
+      width: 6px;
+      height: 6px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .footer-powered {
+      font-size: 10px;
+      color: var(--ink-muted);
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <div class="card">
+
+    <!-- Header -->
+    <div class="card-header">
+      <div class="brand">WiFi Access</div>
+      <div class="mode-badge" id="mode-label">Loading</div>
+    </div>
+
+    <!-- Body -->
+    <div class="card-body">
+
+      <!-- ====== MODE: SPLASH ====== -->
+      <div id="mode-splash">
+
+        <!-- Ad Banner -->
+        <div class="ad-banner">
+          <!-- ถ้ามีรูปโฆษณา: <img src="$(ad-image)" alt="Advertisement"> -->
+          <!-- ถ้าใช้ iframe: <iframe src="$(advertise-url)" frameborder="0" style="width:100%;height:100%;"></iframe> -->
+          <div class="ad-placeholder">
+            <span>Advertisement</span>
+            <p>Your ad banner here<br>แก้ไข ad-image ใน config</p>
+          </div>
+        </div>
+
+        <!-- Countdown Progress -->
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span>กรุณารอสักครู่</span>
+            <strong><span id="countdown-num">15</span>s</strong>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+
+        <!-- Auto-redirect button (enabled after countdown) -->
+        <button class="btn-continue" id="btn-splash" disabled>
+          <span id="btn-splash-text">กำลังนับถอยหลัง...</span>
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 8h10M9 4l4 4-4 4"/>
+          </svg>
+        </button>
+
+      </div><!-- /mode-splash -->
+
+      <!-- ====== MODE: ANNOUNCE ====== -->
+      <div id="mode-announce">
+
+        <div class="announce-icon">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="10" cy="10" r="8"/>
+            <path d="M10 6v4M10 13.5v.5"/>
+          </svg>
+        </div>
+
+        <div class="announce-title" id="announce-title">ประกาศจากผู้ดูแลระบบ</div>
+        <div class="announce-body" id="announce-body">
+          กรุณาอ่านข้อความนี้ก่อนใช้งานอินเทอร์เน็ต
+        </div>
+
+        <div class="announce-divider"></div>
+
+        <div class="announce-meta">
+          <div class="announce-meta-item">
+            <span class="label">สถานที่</span>
+            <span class="value" id="meta-location">$(link-orig)</span>
+          </div>
+          <div class="announce-meta-item">
+            <span class="label">ผู้ใช้</span>
+            <span class="value">$(username)</span>
+          </div>
+        </div>
+
+        <a class="btn-continue" id="btn-announce" href="$(link-orig)">
+          รับทราบและดำเนินการต่อ
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 8h10M9 4l4 4-4 4"/>
+          </svg>
+        </a>
+
+      </div><!-- /mode-announce -->
+
+    </div><!-- /card-body -->
+
+    <!-- Footer -->
+    <div class="card-footer">
+      <div class="footer-network">
+        <div class="dot-online"></div>
+        Connected
+      </div>
+      <div class="footer-powered">MikroTik RouterOS</div>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /page -->
+
+<script>
+/* ============================================================
+   CONFIG — แก้ไขค่าที่นี่เพียงที่เดียว
+   ============================================================ */
+var CONFIG = {
+  // เลือก mode: "splash" หรือ "announce"
+  MODE: "splash",
+
+  // --- Splash settings ---
+  COUNTDOWN: 15,                      // วินาทีที่ต้องรอ
+  AD_IMAGE: "",                       // path รูปโฆษณา เช่น "img/ad.jpg" (ว่าง = placeholder)
+  AD_IFRAME: "",                      // URL iframe โฆษณา (ถ้าใช้ iframe แทนรูป)
+
+  // --- Announce settings ---
+  ANNOUNCE_TITLE: "ประกาศจากผู้ดูแลระบบ",
+  ANNOUNCE_BODY:  "ยินดีต้อนรับสู่บริการ WiFi ฟรี กรุณาใช้งานอย่างเหมาะสมและปฏิบัติตามกฎหมายที่เกี่ยวข้อง ระบบจะบันทึก log การใช้งานตาม พ.ร.บ. คอมพิวเตอร์",
+  LOCATION_NAME:  "$(link-orig)",    // ชื่อสถานที่ (หรือใส่ชื่อตรงๆ เช่น "ชั้น 1 อาคาร A")
+
+  // --- Destination (MikroTik variable) ---
+  DEST_URL: "$(link-orig)"
+};
+/* ============================================================ */
+
+(function () {
+  var mode = CONFIG.MODE;
+
+  // Set mode badge
+  var badge = document.getElementById('mode-label');
+  badge.textContent = mode === 'splash' ? 'Splash Ad' : 'Announcement';
+
+  if (mode === 'splash') {
+    /* ---- SPLASH MODE ---- */
+    document.getElementById('mode-splash').style.display = 'block';
+
+    // Inject ad content
+    if (CONFIG.AD_IFRAME) {
+      var banner = document.querySelector('.ad-banner');
+      banner.innerHTML = '<iframe src="' + CONFIG.AD_IFRAME + '" frameborder="0" style="width:100%;height:100%;"></iframe>';
+    } else if (CONFIG.AD_IMAGE) {
+      var banner2 = document.querySelector('.ad-banner');
+      banner2.innerHTML = '<img src="' + CONFIG.AD_IMAGE + '" alt="Advertisement">';
+    }
+
+    // Countdown
+    var total    = CONFIG.COUNTDOWN;
+    var remaining = total;
+    var fill     = document.getElementById('progress-fill');
+    var numEl    = document.getElementById('countdown-num');
+    var btn      = document.getElementById('btn-splash');
+    var btnText  = document.getElementById('btn-splash-text');
+    var dest     = CONFIG.DEST_URL;
+
+    // Start progress bar at full width, shrink to 0
+    fill.style.transform = 'scaleX(1)';
+
+    var timer = setInterval(function () {
+      remaining--;
+      numEl.textContent = remaining;
+      fill.style.transform = 'scaleX(' + (remaining / total) + ')';
+
+      if (remaining <= 0) {
+        clearInterval(timer);
+        // Auto redirect
+        window.location.href = dest;
+      }
+
+      // Enable button at 5s remaining
+      if (remaining <= 5) {
+        btn.disabled = false;
+        btnText.textContent = 'ข้ามและเข้าใช้งาน';
+      }
+    }, 1000);
+
+    btn.addEventListener('click', function () {
+      if (!btn.disabled) {
+        clearInterval(timer);
+        window.location.href = dest;
+      }
+    });
+
+  } else {
+    /* ---- ANNOUNCE MODE ---- */
+    document.getElementById('mode-announce').style.display = 'block';
+
+    document.getElementById('announce-title').textContent = CONFIG.ANNOUNCE_TITLE;
+    document.getElementById('announce-body').textContent  = CONFIG.ANNOUNCE_BODY;
+    document.getElementById('meta-location').textContent  = CONFIG.LOCATION_NAME;
+
+    var btnA = document.getElementById('btn-announce');
+    btnA.href = CONFIG.DEST_URL;
+  }
+
+})();
+</script>
+
+</body>
+</html>
