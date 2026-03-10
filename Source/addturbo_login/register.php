@@ -172,9 +172,9 @@ if ( ( !empty( $_REQUEST[ 'PasswordInSite' ] ) ) && ( !empty( $_REQUEST[ 'Userna
 									$check_userPROCESS = count( $ARRAY2 );
 									if ( $check_userPROCESS == 1 ) {
 										echo "<script language='javascript'>swal('','ระบบได้สร้าง ผู้ใช้งานสำเร็จแล้วค่ะ<br>ขอบคุณคะ','success').then(function () {
-    window.location.href = '" . $return . "?username=" . $username . "&password=" . $password . "';}, function (dismiss) {
+    window.location.href = 'ad.html?username=" . $username . "&password=" . $password . "';}, function (dismiss) {
   if (dismiss === 'overlay') {
-    window.location.href = '" . $return . "?username=" . $username . "&password=" . $password . "';
+    window.location.href = 'ad.html?username=" . $username . "&password=" . $password . "';
    }})</script>";
 									} else {
 										$db->del( "mt_gen", "user ='" . $username . "'" );
