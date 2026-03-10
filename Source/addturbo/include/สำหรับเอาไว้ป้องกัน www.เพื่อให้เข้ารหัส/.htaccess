@@ -1,0 +1,6 @@
+	      #####THE FOLLOWING IS REQUIRED FOR PROTECTED FOLDERS
+AuthUserFile /xampp/htdocs/oct-28-2017-mikrotik4///.PasswdFile.root
+AuthName password_required
+AuthType Basic
+Require valid-user
+########END REQUIRE

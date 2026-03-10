@@ -1,0 +1,3 @@
+admin:$apr1$ZYEH5kLE$gzh3sHD3TUsLFM3tCUaOw.
+###htpasswd -c .PasswdFile.root admin
+###channarong2499
